@@ -3,7 +3,3 @@ git add -A
 git pull --rebase
 git cm "update"
 git push
-cd ../
-git add -A
-git cm "update"
-git push
