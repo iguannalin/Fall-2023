@@ -1,0 +1,6 @@
+[submodule "codinglab-bot-2023"]
+	path = codinglab-bot-2023
+	url = https://github.com/iguannalin/codinglab-bot-2023.git
+[submodule "ctw"]
+	path = ctw
+	url = https://github.com/iguannalin/ctw.git
