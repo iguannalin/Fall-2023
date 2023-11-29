@@ -4,6 +4,12 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
+    // add to ofApp::setup() to manipulate created windows
+    for(auto it=windows.begin(); it!=windows.end(); it++){
+        ofDefaultVec2 pos(150+cos(fmod(ofGetElapsedTimef(),TWO_PI)) * 100.f, 150+sin(fmod(ofGetElapsedTimef(),TWO_PI)) * 100.f);
+        (*it)->setWindowPosition(pos.x, pos.y);
+    }
+    
     ofBackground(255);
     ofSetCircleResolution(200);
 }
@@ -15,12 +21,6 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-    // add to ofApp::setup() to manipulate created windows
-    for(auto it=windows.begin(); it!=windows.end(); it++){
-        ofDefaultVec2 pos(150+cos(fmod(ofGetElapsedTimef(),TWO_PI)) * 100.f, 150+sin(fmod(ofGetElapsedTimef(),TWO_PI)) * 100.f);
-        (*it)->setWindowPosition(pos.x, pos.y);
-    }
-    
     ofSetColor(100);
     ofDrawCircle(ofGetWidth()*0.5,ofGetHeight()*0.5,50);
     ofSetColor(0);
