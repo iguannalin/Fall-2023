@@ -15,11 +15,17 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
+    // add to ofApp::setup() to manipulate created windows
+    for(auto it=windows.begin(); it!=windows.end(); it++){
+        ofDefaultVec2 pos(150+cos(fmod(ofGetElapsedTimef(),TWO_PI)) * 100.f, 150+sin(fmod(ofGetElapsedTimef(),TWO_PI)) * 100.f);
+        (*it)->setWindowPosition(pos.x, pos.y);
+    }
+    
     ofSetColor(100);
     ofDrawCircle(ofGetWidth()*0.5,ofGetHeight()*0.5,50);
     ofSetColor(0);
     ofDrawBitmapString(ofGetFrameRate(),20,20);
-    ofSetFrameRate(2);
+    ofSetFrameRate(1);
 }
 
 //--------------------------------------------------------------
@@ -69,12 +75,6 @@ void ofApp::mousePressed(int x, int y, int button){
 }
 
 void ofApp::makeCall() {
-    // add to ofApp::setup() to manipulate created windows
-    for(auto it=windows.begin(); it!=windows.end(); it++){
-        ofDefaultVec2 pos(150+cos(fmod(ofGetElapsedTimef(),TWO_PI)) * 100.f, 150+sin(fmod(ofGetElapsedTimef(),TWO_PI)) * 100.f);
-        (*it)->setWindowPosition(pos.x, pos.y);
-    }
-    
     // Testing redirects and https.
     // This server will echo back everything that you send to it.
     std::string url = "https://dweet.io:443/get/latest/dweet/for/307b329b-67ef-4b9d-bf68-7096a62bf6bd";
