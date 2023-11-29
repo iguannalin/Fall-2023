@@ -23,8 +23,11 @@ class ofApp : public ofBaseApp{
 		void windowResized(int w, int h) override;
 		void dragEvent(ofDragInfo dragInfo) override;
 		void gotMessage(ofMessage msg) override;
+        void makeCall() override;
     
         std::vector<shared_ptr<ofAppBaseWindow> > windows;
         void drawRandomInWindow(ofEventArgs & args);
         string element;
+        float getX;
+        float getY;
 };
