@@ -28,7 +28,6 @@ class ofApp : public ofBaseApp{
     
         std::vector<shared_ptr<ofAppBaseWindow> > windows;
         void drawRandomInWindow(ofEventArgs & args);
-        string element;
         float getX;
         float getY;
     

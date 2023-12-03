@@ -55,11 +55,11 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-    ofBackground(0);
+//    ofBackground(0);
 
     // Draw a circle at the cursor position.
-    ofSetColor(cursorColor);
-    ofDrawCircle(cursorX, cursorY, 50);
+//    ofSetColor(cursorColor);
+//    ofDrawCircle(cursorX, cursorY, 50);
     
 //    if (ofGetFrameNum() % 240)
 //    {
@@ -80,7 +80,7 @@ void ofApp::drawRandomInWindow(ofEventArgs & args){
     ofPushStyle();
     ofSetColor(ofRandom(128,255));
     ofFill();
-    ofDrawBitmapStringHighlight(element, ofPoint(30, 30));
+    ofDrawCircle(getX+50, getY+50, 50);
     ofPopStyle();
 }
 
