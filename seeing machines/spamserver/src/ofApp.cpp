@@ -78,9 +78,9 @@ void ofApp::keyPressed(int key){
 
 void ofApp::drawRandomInWindow(ofEventArgs & args){
     ofPushStyle();
-    ofSetColor(ofRandom(128,255));
+    ofSetColor(ofColor(ofRandom(0,255),ofRandom(0,255),ofRandom(0,255)));
     ofFill();
-    ofDrawCircle(getX+50, getY+50, 50);
+    ofDrawRectangle(ofRandomuf()*20.f, ofRandomuf()*20.f, ofRandomuf()*80.f, ofRandomuf()*80.f);
     ofPopStyle();
 }
 
