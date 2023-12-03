@@ -3,7 +3,7 @@
 
 void ofApp::setup()
 {
-  ofSetWindowShape(640, 480);
+  ofSetWindowShape(1280, 2400);
 
   // Make the circle smoother by increasing the resolution.
   ofSetCircleResolution(128);

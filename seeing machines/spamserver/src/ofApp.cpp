@@ -13,7 +13,7 @@ void ofApp::setup(){
     ofBackground(255);
     ofSetCircleResolution(200);
 
-    ofSetFrameRate(0.2);
+//    ofSetFrameRate(0.2);
     
     // Set up the OSC receiver.
     recvPort = 3030;
@@ -31,11 +31,15 @@ void ofApp::update(){
 
       if (msg.getAddress() == "/cursor/move")
       {
-        cursorX = msg.getArgAsInt(0);
-        getX = msg.getArgAsInt(0);
-        cursorY = msg.getArgAsInt(1);
-        getY = msg.getArgAsInt(1);
-        drawWindow();
+//        cursorX = msg.getArgAsInt(0);
+//      cursorY = msg.getArgAsInt(1);
+          if (abs(msg.getArgAsInt(0) - getX) > 25 ||
+              abs(msg.getArgAsInt(1) - getY) > 25)
+          {
+              getX = msg.getArgAsInt(0);
+              getY = msg.getArgAsInt(1);
+              drawWindow();
+          }
       }
       else if (msg.getAddress() == "/cursor/color")
       {
