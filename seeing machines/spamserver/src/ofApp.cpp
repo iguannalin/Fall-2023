@@ -12,21 +12,50 @@ void ofApp::setup(){
     
     ofBackground(255);
     ofSetCircleResolution(200);
-    
+
     ofSetFrameRate(0.2);
+    
+    // Set up the OSC receiver.
+    recvPort = 3030;
+    receiver.setup(recvPort);
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
+    while (receiver.hasWaitingMessages())
+    {
+      // Get the next message.
+      ofxOscMessage msg;
+      receiver.getNextMessage(msg);
+      cout << msg << endl;
 
+      if (msg.getAddress() == "/cursor/move")
+      {
+        cursorX = msg.getArgAsInt(0);
+        getX = msg.getArgAsInt(0);
+        cursorY = msg.getArgAsInt(1);
+        getY = msg.getArgAsInt(1);
+        drawWindow();
+      }
+      else if (msg.getAddress() == "/cursor/color")
+      {
+        // Generate a new random color.
+        cursorColor = ofColor(ofRandom(127, 255), ofRandom(127, 255), ofRandom(127, 255));
+      }
+      else
+      {
+        ofLogWarning(__FUNCTION__) << "Unrecognized message " << msg.getAddress();
+      }
+    }
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-    ofSetColor(100);
-    ofDrawCircle(ofGetWidth()*0.5,ofGetHeight()*0.5,50);
-    ofSetColor(0);
-    ofDrawBitmapString(ofGetFrameRate(),20,20);
+    ofBackground(0);
+
+    // Draw a circle at the cursor position.
+    ofSetColor(cursorColor);
+    ofDrawCircle(cursorX, cursorY, 50);
     
 //    if (ofGetFrameNum() % 240)
 //    {
@@ -41,7 +70,6 @@ void ofApp::exit(){
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-    drawWindow();
 }
 
 void ofApp::drawRandomInWindow(ofEventArgs & args){
@@ -75,8 +103,8 @@ void ofApp::mousePressed(int x, int y, int button){
 void ofApp::drawWindow() {
     ofGLFWWindowSettings settings;
     settings.setSize(300,300);
-    settings.setPosition(ofVec2f(ofRandom(0,400),ofRandom(0,600)));
-//    settings.setPosition(ofVec2f(getX,getY));
+//    settings.setPosition(ofVec2f(ofRandom(0,400),ofRandom(0,600)));
+    settings.setPosition(ofVec2f(getX,getY));
     settings.resizable = false;
     windows.push_back( ofCreateWindow(settings) );
     windows.back()->setVerticalSync(false);
