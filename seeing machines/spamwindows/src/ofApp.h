@@ -24,6 +24,7 @@ class ofApp : public ofBaseApp{
 		void dragEvent(ofDragInfo dragInfo) override;
 		void gotMessage(ofMessage msg) override;
         void makeCall();
+        void drawWindow();
     
         std::vector<shared_ptr<ofAppBaseWindow> > windows;
         void drawRandomInWindow(ofEventArgs & args);

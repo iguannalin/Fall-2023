@@ -1,5 +1,48 @@
 #include "ofApp.h"
 
+using namespace ofxCv;
+using namespace cv;
+
+const float dyingTime = 1;
+
+void Glow::setup(const cv::Rect& track) {
+    color.setHsb(ofRandom(0, 255), 255, 255);
+    cur = toOf(track).getCenter();
+    smooth = cur;
+}
+
+void Glow::update(const cv::Rect& track) {
+    cur = toOf(track).getCenter();
+    smooth.interpolate(cur, .5);
+    all.addVertex(smooth);
+}
+
+void Glow::kill() {
+    float curTime = ofGetElapsedTimef();
+    if(startedDying == 0) {
+        startedDying = curTime;
+    } else if(curTime - startedDying > dyingTime) {
+        dead = true;
+    }
+}
+
+void Glow::draw() {
+    ofPushStyle();
+    float size = 16;
+    ofSetColor(255);
+    if(startedDying) {
+        ofSetColor(ofColor::red);
+        size = ofMap(ofGetElapsedTimef() - startedDying, 0, dyingTime, size, 0, true);
+    }
+    ofNoFill();
+    ofDrawCircle(cur, size);
+    ofSetColor(color);
+    all.draw();
+    ofSetColor(255);
+    ofDrawBitmapString(ofToString(label), cur);
+    ofPopStyle();
+}
+
 //--------------------------------------------------------------
 void ofApp::setup(){
     ofSetLogLevel(OF_LOG_VERBOSE);
@@ -33,14 +76,14 @@ void ofApp::setup(){
     grayThreshNear.allocate(kinect.width, kinect.height);
     grayThreshFar.allocate(kinect.width, kinect.height);
     
-    nearThreshold = 230;
-    farThreshold = 70;
+    nearThreshold = 210;//230;
+    farThreshold = 190;//70;
     bThreshWithOpenCV = true;
     
     ofSetFrameRate(60);
     
     // zero the tilt on startup
-    angle = 0;
+    angle = 30;//0;
     kinect.setCameraTiltAngle(angle);
     
     // start from the front
@@ -105,11 +148,17 @@ void ofApp::draw(){
         easyCam.end();
     } else {
         // draw from the live kinect
-        kinect.drawDepth(10, 10, 400, 300);
-        kinect.draw(420, 10, 400, 300);
+//        kinect.drawDepth(10, 10, 400, 300);
+//        kinect.draw(420, 10, 400, 300);
         
-        grayImage.draw(10, 320, 400, 300);
-        contourFinder.draw(10, 320, 400, 300);
+        grayImage.draw(0, 0, 640, 480);//(10, 320, 400, 300);
+        contourFinder.draw(0, 0, 640, 480);//(10, 320, 400, 300);
+        
+        vector<Glow>& followers = tracker.getFollowers();
+        for(int i = 0; i < followers.size(); i++) {
+            cout << followers.size() << endl;
+            followers[i].draw();
+        }
         
 #ifdef USE_TWO_KINECTS
         kinect2.draw(420, 320, 400, 300);
@@ -171,7 +220,7 @@ void ofApp::drawPointCloud() {
 
 //--------------------------------------------------------------
 void ofApp::exit() {
-    kinect.setCameraTiltAngle(0); // zero the tilt on exit
+//    kinect.setCameraTiltAngle(0); // zero the tilt on exit
     kinect.close();
     
 #ifdef USE_TWO_KINECTS

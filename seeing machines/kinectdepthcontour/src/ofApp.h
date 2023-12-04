@@ -2,7 +2,24 @@
 
 #include "ofMain.h"
 #include "ofxOpenCv.h"
+#include "ofxCv.h"
 #include "ofxKinect.h"
+
+class Glow : public ofxCv::RectFollower {
+protected:
+    ofColor color;
+    ofVec3f cur, smooth;
+    float startedDying;
+    ofPolyline all;
+public:
+    Glow()
+        :startedDying(0) {
+    }
+    void setup(const cv::Rect& track);
+    void update(const cv::Rect& track);
+    void kill();
+    void draw();
+};
 
 class ofApp : public ofBaseApp{
 
@@ -41,6 +58,8 @@ class ofApp : public ofBaseApp{
         ofxCvGrayscaleImage grayThreshFar; // the far thresholded image
         
         ofxCvContourFinder contourFinder;
+    
+        ofxCv::RectTrackerFollower<Glow> tracker;
         
         bool bThreshWithOpenCV;
         bool bDrawPointCloud;

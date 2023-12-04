@@ -10,8 +10,11 @@ void ofApp::setup(){
         (*it)->setWindowPosition(pos.x, pos.y);
     }
     
-    ofBackground(255);
-    ofSetCircleResolution(200);
+//    ofBackground(255);
+//    ofSetCircleResolution(200);
+//    
+//    ofSetFrameRate(0.2);
+//    ofApp::makeCall();
 }
 
 //--------------------------------------------------------------
@@ -21,11 +24,16 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-    ofSetColor(100);
-    ofDrawCircle(ofGetWidth()*0.5,ofGetHeight()*0.5,50);
-    ofSetColor(0);
-    ofDrawBitmapString(ofGetFrameRate(),20,20);
-    ofSetFrameRate(1);
+//    ofSetColor(100);
+//    ofDrawCircle(ofGetWidth()*0.5,ofGetHeight()*0.5,50);
+//    ofSetColor(0);
+//    ofDrawBitmapString(ofGetFrameRate(),20,20);
+    
+    
+//    if (ofGetFrameNum() % 240)
+//    {
+//        ofApp::makeCall();
+//    }
 }
 
 //--------------------------------------------------------------
@@ -62,7 +70,10 @@ void ofApp::mouseDragged(int x, int y, int button){
 
 //--------------------------------------------------------------
 void ofApp::mousePressed(int x, int y, int button){
-    ofApp::makeCall();
+    ofApp::drawWindow();
+}
+
+void ofApp::drawWindow() {
     ofGLFWWindowSettings settings;
     settings.setSize(300,300);
     settings.setPosition(ofVec2f(getX,getY));
@@ -77,7 +88,8 @@ void ofApp::mousePressed(int x, int y, int button){
 void ofApp::makeCall() {
     // Testing redirects and https.
     // This server will echo back everything that you send to it.
-    std::string url = "https://dweet.io:443/get/latest/dweet/for/307b329b-67ef-4b9d-bf68-7096a62bf6bd";
+    //    https://seasons986.pythonanywhere.com/getcoordinates
+    std::string url = "https://dweet.io:443/get/latest/dweet/for/c7d93132-9150-48ae-a239-df99f54e6a49";
 
     // Create a client.
     ofxHTTP::Client client;
@@ -107,6 +119,7 @@ void ofApp::makeCall() {
     {
         // Execute the request within the given context.
         auto response = client.execute(context, request);
+        std::cout << response->getStatus() << std::endl;
 
         // Check the response.
         if (response->getStatus() == Poco::Net::HTTPResponse::HTTP_OK)
@@ -116,32 +129,38 @@ void ofApp::makeCall() {
 
             // Buffer the response, or otherwise consume the stream.
             ofJson json(response->json());
-
-            ofLogNotice("ofApp::setup") << "Content Begin";
-            
-            element = json.begin().value();
-            ofJson with = json.at("with");
+            ofLogNotice("ofApp::setup") << "***";
             std::cout << json.dump(4) << std::endl;
-            std::cout << json["with"] << std::endl;
-            getX = json["with"][0]["content"]["x"];
-            getY = json["with"][0]["content"]["y"];
-            std::cout << json["with"][0]["content"]["x"] << std::endl;
-            std::cout << json["with"][0]["content"]["y"] << std::endl;
-//            std::cout << with.at("content") << std::endl;
             
-            ofLogNotice("ofApp::setup") << "Content End";
+            if (json.size() > 0) {
+                ofLogNotice("ofApp::setup") << "Content Begin";
+                getX = json[0];
+                getY = json[1];
+                std::cout << json[0] << std::endl;
+                std::cout << json[1] << std::endl;
+                ofLogNotice("ofApp::setup") << "Content End";
+                
+                element = "x: ";
+                element += to_string(getX);
+                element += " y: ";
+                element += to_string(getY);
+//                ofApp::drawWindow();
+            }
         }
         else
         {
+            ofLogError("erason");
             ofLogError("ofApp::setup") << response->getStatus() << " " << response->getReason();
         }
     }
     catch (const Poco::Exception& exc)
     {
+        ofLogError("poco issue");
         ofLogError("ofApp::setup") << exc.displayText();
     }
     catch (const std::exception& exc)
     {
+        ofLogError("last exception");
         ofLogError("ofApp::setup") << exc.what();
     }
 }
