@@ -58,6 +58,7 @@ class ofApp : public ofBaseApp{
         ofxCvGrayscaleImage grayThreshFar; // the far thresholded image
         
         ofxCvContourFinder contourFinder;
+        ofxCv::ContourFinder cvContourFinder;
     
         ofxCv::RectTrackerFollower<Glow> tracker;
         

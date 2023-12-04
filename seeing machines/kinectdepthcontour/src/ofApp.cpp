@@ -130,6 +130,8 @@ void ofApp::update(){
         // find contours which are between the size of 20 pixels and 1/3 the w*h pixels.
         // also, find holes is set to true so we will get interior contours as well....
         contourFinder.findContours(grayImage, 10, (kinect.width*kinect.height)/2, 20, false);
+        cvContourFinder.findContours(grayImage);
+        tracker.track(cvContourFinder.getBoundingRects());
     }
     
 #ifdef USE_TWO_KINECTS
