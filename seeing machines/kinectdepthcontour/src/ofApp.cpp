@@ -33,8 +33,8 @@ void ofApp::setup(){
     grayThreshNear.allocate(kinect.width, kinect.height);
     grayThreshFar.allocate(kinect.width, kinect.height);
     
-    nearThreshold = 70;
-    farThreshold = 230;
+    nearThreshold = 230;
+    farThreshold = 70;
     bThreshWithOpenCV = true;
     
     ofSetFrameRate(60);
@@ -73,7 +73,7 @@ void ofApp::update(){
             ofPixels & pix = grayImage.getPixels();
             int numPixels = pix.size();
             for(int i = 0; i < numPixels; i++) {
-                if(pix[i] < farThreshold && pix[i] > nearThreshold) {
+                if(pix[i] < nearThreshold && pix[i] > farThreshold) {
                     pix[i] = 255;
                 } else {
                     pix[i] = 0;
