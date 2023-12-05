@@ -13,11 +13,12 @@ void ofApp::setup(){
     ofBackground(255);
     ofSetCircleResolution(200);
 
-//    ofSetFrameRate(0.2);
+    ofSetFrameRate(8);
     
     // Set up the OSC receiver.
     recvPort = 3030;
     receiver.setup(recvPort);
+    
 }
 
 //--------------------------------------------------------------
@@ -106,9 +107,9 @@ void ofApp::mousePressed(int x, int y, int button){
 
 void ofApp::drawWindow() {
     ofGLFWWindowSettings settings;
-    settings.setSize(300,300);
+    settings.setSize(100,100);
 //    settings.setPosition(ofVec2f(ofRandom(0,400),ofRandom(0,600)));
-    settings.setPosition(ofVec2f(getX,getY));
+    settings.setPosition(ofVec2f(getX+150,getY+20));
     settings.resizable = false;
     windows.push_back( ofCreateWindow(settings) );
     windows.back()->setVerticalSync(false);
