@@ -20,4 +20,7 @@ class ofApp : public ofBaseApp{
     
         int recvPort;
         ofxOscReceiver receiver;
+    
+        int windowIndex;
+        int windowLimit;
 };
