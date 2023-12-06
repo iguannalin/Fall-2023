@@ -74,7 +74,6 @@ void ofApp::draw(){
             sender.sendMessage(msg);
         }
     }
-    
     gui.draw();
 }
 
