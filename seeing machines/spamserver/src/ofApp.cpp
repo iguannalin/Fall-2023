@@ -4,12 +4,12 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-//    ofSetFrameRate(15);
+    ofSetFrameRate(15);
     
     // Set up the OSC receiver.
     recvPort = 3030;
     receiver.setup(recvPort);
-    windowLimit = 5; // no more than 20 windows open at a time
+    windowLimit = 5; // no more than this many windows open at a time
 }
 
 //--------------------------------------------------------------
@@ -22,11 +22,11 @@ void ofApp::update(){
       if (msg.getAddress() == "/cursor/move")
       {
 //          check if at least 25px offset from previous window
-          if (abs(msg.getArgAsInt(0) - getX) > 25 ||
-              abs(msg.getArgAsInt(1) - getY) > 25)
+          if (abs(msg.getArgAsInt(0) - getX) > 50 ||
+              abs(msg.getArgAsInt(1) - getY) > 50)
           {
-              getX = msg.getArgAsInt(0);
-              getY = msg.getArgAsInt(1);
+              getX = ofLerp(getX, msg.getArgAsInt(0), 0.5);
+              getY = ofLerp(getY, msg.getArgAsInt(1), 0.5);
               drawWindow();
           }
       } else
@@ -62,7 +62,7 @@ void ofApp::drawWindow() {
         ofGLFWWindowSettings settings;
         settings.setSize(100,100);
         settings.setPosition(ofVec2f(getX,getY));
-        windows.push_back( ofCreateWindow(settings) );
+        windows.push_back( ofCreateWindow(settings));
         
         // when this is front() rectangles stop drawing after 1st popup
         ofAddListener(windows.back()->events().draw, this, &ofApp::drawRandomInWindow);
@@ -70,6 +70,5 @@ void ofApp::drawWindow() {
         shared_ptr<ofAppBaseWindow> recycle = windows[windowIndex];
         recycle->setWindowPosition(getX,getY);
     }
-    cout << windows.size() << endl;
     windowIndex+=1;
 }
