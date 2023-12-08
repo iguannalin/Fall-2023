@@ -62,6 +62,7 @@ void ofApp::draw(){
     
     contourFinder.draw();
     
+    //    TODO: handle more than one blob (unique spam windows for each)
     // draw centroids of the contour blobs
     if (contourFinder.nBlobs > 0) {
         for (int i=0; i<contourFinder.nBlobs; i++) {

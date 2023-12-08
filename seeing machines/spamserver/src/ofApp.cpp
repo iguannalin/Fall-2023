@@ -46,14 +46,6 @@ void ofApp::exit(){
 
 }
 
-void ofApp::drawRandomInWindow(ofEventArgs & args){
-    ofPushStyle();
-    ofSetColor(ofColor(ofRandom(0,255),ofRandom(0,255),ofRandom(0,255)));
-    ofFill();
-    ofDrawRectangle(ofRandomuf()*20.f, ofRandomuf()*20.f, ofRandomuf()*80.f, ofRandomuf()*80.f);
-    ofPopStyle();
-}
-
 void ofApp::drawWindow() {
     if (windowIndex == windowLimit) {
         windowIndex = 0;
@@ -71,4 +63,12 @@ void ofApp::drawWindow() {
         recycle->setWindowPosition(getX,getY);
     }
     windowIndex+=1;
+}
+
+void ofApp::drawRandomInWindow(ofEventArgs & args){
+    ofPushStyle();
+    ofSetColor(ofColor(ofRandom(0,255),ofRandom(0,255),ofRandom(0,255)));
+    ofFill();
+    ofDrawRectangle(ofRandomuf()*20.f, ofRandomuf()*20.f, ofRandomuf()*80.f, ofRandomuf()*80.f);
+    ofPopStyle();
 }

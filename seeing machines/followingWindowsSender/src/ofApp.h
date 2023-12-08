@@ -34,4 +34,5 @@ class ofApp : public ofBaseApp{
         ofParameter<float> maxArea;
         
         ofxPanel gui;
+        std::vector<ofVec2f> positions;
 };

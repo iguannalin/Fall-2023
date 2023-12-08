@@ -130,6 +130,8 @@ void ofApp::update(){
         // find contours which are between the size of 20 pixels and 1/3 the w*h pixels.
         // also, find holes is set to true so we will get interior contours as well....
         contourFinder.findContours(grayImage, 10, (kinect.width*kinect.height)/2, 20, false);
+//        cvContourFinder.setMinAreaRadius(10);
+//        cvContourFinder.setMaxAreaRadius(15); // doesn't work!!!
         cvContourFinder.findContours(grayImage);
         tracker.track(cvContourFinder.getBoundingRects());
     }
@@ -150,8 +152,8 @@ void ofApp::draw(){
         easyCam.end();
     } else {
         // draw from the live kinect
-//        kinect.drawDepth(10, 10, 400, 300);
-//        kinect.draw(420, 10, 400, 300);
+        //        kinect.drawDepth(10, 10, 400, 300);
+        //        kinect.draw(420, 10, 400, 300);
         
         grayImage.draw(0, 0, 640, 480);//(10, 320, 400, 300);
         contourFinder.draw(0, 0, 640, 480);//(10, 320, 400, 300);
@@ -170,7 +172,7 @@ void ofApp::draw(){
     // draw instructions
     ofSetColor(255, 255, 255);
     std::stringstream reportStream;
-        
+    
     if(kinect.hasAccelControl()) {
         reportStream << "accel is: " << ofToString(kinect.getMksAccel().x, 2) << " / "
         << ofToString(kinect.getMksAccel().y, 2) << " / "
@@ -186,7 +188,7 @@ void ofApp::draw(){
     << "set far threshold " << farThreshold << " (press: < >) num blobs found " << contourFinder.nBlobs
     << ", fps: " << ofGetFrameRate() << std::endl
     << "press c to close the connection and o to open it again, connection is: " << kinect.isConnected() << std::endl;
-
+    
     if(kinect.hasCamTiltControl()) {
         reportStream << "press UP and DOWN to change the tilt angle: " << angle << " degrees" << std::endl
         << "press 1-5 & 0 to change the led mode" << std::endl;
@@ -222,7 +224,7 @@ void ofApp::drawPointCloud() {
 
 //--------------------------------------------------------------
 void ofApp::exit() {
-//    kinect.setCameraTiltAngle(0); // zero the tilt on exit
+    //    kinect.setCameraTiltAngle(0); // zero the tilt on exit
     kinect.close();
     
 #ifdef USE_TWO_KINECTS
@@ -318,55 +320,55 @@ void ofApp::keyPressed (int key) {
 
 //--------------------------------------------------------------
 void ofApp::keyReleased(int key){
-
+    
 }
 
 //--------------------------------------------------------------
 void ofApp::mouseMoved(int x, int y ){
-
+    
 }
 
 //--------------------------------------------------------------
 void ofApp::mouseDragged(int x, int y, int button){
-
+    
 }
 
 //--------------------------------------------------------------
 void ofApp::mousePressed(int x, int y, int button){
-
+    
 }
 
 //--------------------------------------------------------------
 void ofApp::mouseReleased(int x, int y, int button){
-
+    
 }
 
 //--------------------------------------------------------------
 void ofApp::mouseScrolled(int x, int y, float scrollX, float scrollY){
-
+    
 }
 
 //--------------------------------------------------------------
 void ofApp::mouseEntered(int x, int y){
-
+    
 }
 
 //--------------------------------------------------------------
 void ofApp::mouseExited(int x, int y){
-
+    
 }
 
 //--------------------------------------------------------------
 void ofApp::windowResized(int w, int h){
-
+    
 }
 
 //--------------------------------------------------------------
 void ofApp::gotMessage(ofMessage msg){
-
+    
 }
 
 //--------------------------------------------------------------
 void ofApp::dragEvent(ofDragInfo dragInfo){ 
-
+    
 }
