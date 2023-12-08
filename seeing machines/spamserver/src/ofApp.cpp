@@ -46,6 +46,7 @@ void ofApp::exit(){
 
 }
 
+//TODO: display ad content from json file
 void ofApp::drawWindow() {
     if (windowIndex == windowLimit) {
         windowIndex = 0;
