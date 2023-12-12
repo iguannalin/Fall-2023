@@ -3,7 +3,7 @@
 #include "ofMain.h"
 #include "ofxOsc.h"
 #include "ofxOpenCv.h"
-//#include "ofxCv.h"
+#include "ofxCv.h"
 #include "ofxGui.h"
 #include "ofxKinect.h"
 
@@ -28,19 +28,11 @@ public:
     
     ofxCvContourFinder contourFinder;
     
-    ofxCvGrayscaleImage grayImage; // grayscale depth image
-    ofxCvGrayscaleImage grayThreshNear; // the near thresholded image
-    ofxCvGrayscaleImage grayThreshFar; // the far thresholded image
+    ofParameter<float> nearThreshold;
+    ofParameter<float> farThreshold;
+    ofParameter<float> minArea;
+    ofParameter<float> maxArea;
     
-    
-    int nearThreshold;
-    int farThreshold;
-    
-//    ofParameter<float> nearThreshold;
-//    ofParameter<float> farThreshold;
-//    ofParameter<float> minArea;
-//    ofParameter<float> maxArea;
-//
     ofxPanel gui;
     std::vector<ofVec2f> positions;
     bool test;

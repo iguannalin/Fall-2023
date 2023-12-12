@@ -5,11 +5,12 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
     ofSetFrameRate(15);
+    blobs = 0;
     
     // Set up the OSC receiver.
     recvPort = 3030;
     receiver.setup(recvPort);
-    windowLimit = 300; // no more than this many windows open at a time
+    windowLimit = 10; // no more than this many windows open at a time per person/blob
 }
 
 //--------------------------------------------------------------
@@ -21,8 +22,8 @@ void ofApp::update(){
       receiver.getNextMessage(msg);
       if (msg.getAddress() == "/cursor/move")
       {
-          cout<<msg.getArgAsInt(0)<<msg.getArgAsInt(1) <<endl;
-//          check if at least 25px offset from previous window
+//          cout<<msg.getArgAsInt(0)<<msg.getArgAsInt(1) <<endl;
+//          check if at least 100px offset from previous window
           if (abs(msg.getArgAsInt(0) - getX) > 100 ||
               abs(msg.getArgAsInt(1) - getY) > 100)
           {
@@ -32,7 +33,7 @@ void ofApp::update(){
           }
       } else if (msg.getAddress() == "/cursor/blobSize")
       {
-          cout << "blobs: " << msg.getArgAsInt(0)  << endl;
+          blobs = msg.getArgAsInt(0);
       } else
       {
         ofLogWarning(__FUNCTION__) << "Unrecognized message " << msg.getAddress();
@@ -51,21 +52,21 @@ void ofApp::exit(){
 }
 
 void ofApp::drawWindow() {
-    if (windowIndex == windowLimit) {
+    if (windowIndex >= windowLimit) {
         windowIndex = 0;
     }
-    if (windows.size() < windowLimit) {
-        ofGLFWWindowSettings settings;
-        settings.setSize(100,100);
-        settings.setPosition(ofVec2f(getX,getY));
-        windows.push_back( ofCreateWindow(settings));
-        
-        // when this is front() rectangles stop drawing after 1st popup
-        ofAddListener(windows.back()->events().draw, this, &ofApp::drawRandomInWindow);
-    } else {
-        cout << "here: " << windowIndex << endl;
-        shared_ptr<ofAppBaseWindow> recycle = windows[windowIndex];
-        recycle->setWindowPosition(getX,getY);
+    for (int i = 0; i < blobs; i++) {
+        if (windows.size() < (blobs*windowLimit)) {
+            ofGLFWWindowSettings settings;
+            settings.setSize(100,100);
+            settings.setPosition(ofVec2f(getX,getY));
+            windows.push_back( ofCreateWindow(settings));
+            // when this is front() rectangles stop drawing after 1st popup
+            ofAddListener(windows.back()->events().draw, this, &ofApp::drawRandomInWindow);
+        } else {
+            shared_ptr<ofAppBaseWindow> recycle = windows[(i*windowLimit)+windowIndex];
+            recycle->setWindowPosition(getX,getY);
+        }
     }
     windowIndex+=1;
 }

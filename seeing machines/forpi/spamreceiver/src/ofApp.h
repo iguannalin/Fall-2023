@@ -14,6 +14,7 @@ class ofApp : public ofBaseApp{
     
         std::vector<shared_ptr<ofAppBaseWindow> > windows;
         void drawRandomInWindow(ofEventArgs & args);
+        int blobs;
         float getX;
         float getY;
     
