@@ -25,4 +25,5 @@ class ofApp : public ofBaseApp{
         int windowLimit;
     
         ofTrueTypeFont font;
+        std::vector<string> ads;
 };

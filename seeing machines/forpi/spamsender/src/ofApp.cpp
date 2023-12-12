@@ -5,6 +5,7 @@ void ofApp::setup(){
     // depth thresholds
     nearThreshold.set("Near Threshold", 0.01f, 0.0f, 0.1f);
     farThreshold.set("Far Threshold", 0.02f, 0.0f, 0.1f);
+    scale = 1.7;
     
     // gui setup
     gui.setup();
@@ -16,12 +17,8 @@ void ofApp::setup(){
     kinect.init();
     kinect.open();
     
-    // color img initialization
-//    colorImg.allocate(kinect.getWidth(), kinect.getHeight());
-//
     // Set up the OSC sender.
     sendAddr = "localhost";
-//    sendAddr = "172.20.10.7";
     sendPort = 3030;
     sender.setup(sendAddr, sendPort);
     test =  true;
@@ -33,9 +30,6 @@ void ofApp::update(){
 
     if (kinect.isFrameNew()){
         test = false;
-        // update color img
-//        colorImg.setFromPixels(kinect.getPixels());
-        
         // get pixel data from kinect
         const ofFloatPixels& rawDepthPix = kinect.getRawDepthPixels();
         
@@ -59,13 +53,15 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-//    ofBackground(ofColor(0,0,0,0));
     ofClear(0.0f, 0.0f, 0.0f, 0.0f);
     
+    
     if (!test) {
-//      colorImg.draw(0, 0);
-        
+        ofPushMatrix();
+        ofScale(scale,scale);
+        // draw something
         contourFinder.draw();
+        ofPopMatrix();
         
         // draw centroids of the contour blobs
         if (contourFinder.nBlobs > 0) {
@@ -93,7 +89,7 @@ void ofApp::mouseMoved(int x, int y) {
         msg.setAddress("/cursor/move");
         msg.addIntArg(x);
         msg.addIntArg(y);
-        cout << x << y << endl;
+//        cout << x << y << endl;
         sender.sendMessage(msg);
     }
 }

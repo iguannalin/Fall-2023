@@ -36,4 +36,5 @@ public:
     ofxPanel gui;
     std::vector<ofVec2f> positions;
     bool test;
+    float scale;
 };
