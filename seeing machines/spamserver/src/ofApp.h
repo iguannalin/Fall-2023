@@ -23,4 +23,6 @@ class ofApp : public ofBaseApp{
     
         int windowIndex;
         int windowLimit;
+    
+        ofTrueTypeFont font;
 };

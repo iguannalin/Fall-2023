@@ -20,9 +20,10 @@ void ofApp::setup(){
     colorImg.allocate(kinect.getWidth(), kinect.getHeight());
     
     // Set up the OSC sender.
-    sendAddr = "localhost";
+    sendAddr = "172.20.10.7";
     sendPort = 3030;
     sender.setup(sendAddr, sendPort);
+    test =  true;
 }
 
 //--------------------------------------------------------------
@@ -30,6 +31,7 @@ void ofApp::update(){
     kinect.update();
 
     if (kinect.isFrameNew()){
+        test = false;
         // update color img
         colorImg.setFromPixels(kinect.getPixels());
         
@@ -56,26 +58,39 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-    ofBackground(0);
+//    ofBackground(ofColor(0,0,0,0));
+    ofClear(0.0f, 0.0f, 0.0f, 0.0f);
     
-    colorImg.draw(0, 0);
-    
-    contourFinder.draw();
-    
-    //    TODO: handle more than one blob (unique spam windows for each)
-    // draw centroids of the contour blobs
-    if (contourFinder.nBlobs > 0) {
-        for (int i=0; i<contourFinder.nBlobs; i++) {
-            ofVec3f centroid = contourFinder.blobs[i].centroid;
-            ofDrawCircle(centroid, 20);
-            ofxOscMessage msg;
-            msg.setAddress("/cursor/move");
-            msg.addIntArg(centroid[0]);
-            msg.addIntArg(centroid[1]);
-            sender.sendMessage(msg);
+    if (!test) {
+//        colorImg.draw(0, 0);
+        
+        contourFinder.draw();
+        
+        //    TODO: handle more than one blob (unique spam windows for each)
+        // draw centroids of the contour blobs
+        if (contourFinder.nBlobs > 0) {
+            for (int i=0; i<contourFinder.nBlobs; i++) {
+                ofVec3f centroid = contourFinder.blobs[i].centroid;
+//                ofDrawCircle(centroid, 20);
+                ofxOscMessage msg;
+                msg.setAddress("/cursor/move");
+                msg.addIntArg(centroid[0]);
+                msg.addIntArg(centroid[1]);
+                sender.sendMessage(msg);
+            }
         }
+        gui.draw();
     }
-    gui.draw();
+}
+
+void ofApp::mouseMoved(int x, int y) {
+    if (test) {
+        ofxOscMessage msg;
+        msg.setAddress("/cursor/move");
+        msg.addIntArg(x);
+        msg.addIntArg(y);
+        sender.sendMessage(msg);
+    }
 }
 
 //--------------------------------------------------------------

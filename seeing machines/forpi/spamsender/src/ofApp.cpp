@@ -4,8 +4,8 @@
 void ofApp::setup(){
     // depth thresholds
     nearThreshold.set("Near Threshold", 0.01f, 0.0f, 0.1f);
-    farThreshold.set("Far Threshold", 0.02f, 0.0f, 0.1f);
-    scale = 1.7;
+    farThreshold.set("Far Threshold", 0.03f, 0.0f, 0.1f);
+    scale = 2;
     
     // gui setup
     gui.setup();
@@ -48,6 +48,7 @@ void ofApp::update(){
         
         // look for contours
         contourFinder.findContours(thresholdImg, minimum, maximum, 3, false);
+//        ofScale(1.7,1.7);
     }
 }
 
@@ -75,7 +76,7 @@ void ofApp::draw(){
                 msg.setAddress("/cursor/move");
                 msg.addIntArg(centroid[0]);
                 msg.addIntArg(centroid[1]);
-//                cout << centroid[0] << centroid[1] << endl;;
+                cout << centroid[0] << centroid[1] << endl;;
                 sender.sendMessage(msg);
             }
         }

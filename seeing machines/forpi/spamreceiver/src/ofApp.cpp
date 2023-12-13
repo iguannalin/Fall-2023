@@ -5,13 +5,13 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
     ofSetBackgroundAuto(false);
-    ofSetFrameRate(15);
+    ofSetFrameRate(25);
     blobs = 1;
     
     // Set up the OSC receiver.
     recvPort = 3030;
     receiver.setup(recvPort);
-    windowLimit = 10; // no more than this many windows open at a time per person/blob
+    windowLimit = 5; // no more than this many windows open at a time per person/blob
     
     adLinks = {
         "https://iguannalin.github.io/spam/assets/howtocookspam.gif",
@@ -42,17 +42,18 @@ void ofApp::update(){
       {
 //          cout<<msg.getArgAsInt(0)<<msg.getArgAsInt(1) <<endl;
 //          check if at least 100px offset from previous window
-          if (abs(msg.getArgAsInt(0) - getX) > 100 ||
-              abs(msg.getArgAsInt(1) - getY) > 100)
+          if (abs(msg.getArgAsInt(0) - getX) > 75 ||
+              abs(msg.getArgAsInt(1) - getY) > 75)
           {
               getX = ofLerp(getX, msg.getArgAsInt(0), 0.5);
               getY = ofLerp(getY, msg.getArgAsInt(1), 0.5);
-//              ofScale(0.7,0.7);
+//              ofScale(2,2);
               drawWindow();
           }
       } else if (msg.getAddress() == "/cursor/blobSize")
       {
           blobs = msg.getArgAsInt(0);
+          cout << "blobs: " << blobs<<endl;
       } else
       {
         ofLogWarning(__FUNCTION__) << "Unrecognized message " << msg.getAddress();
@@ -62,6 +63,8 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
+    
+    
     
 }
 
@@ -78,7 +81,7 @@ void ofApp::drawWindow() {
         if (windows.size() < (blobs*windowLimit)) {
             ofGLFWWindowSettings settings;
             settings.setSize(150,150);
-            settings.setPosition(ofVec2f(getX,getY));
+            settings.setPosition(ofVec2f(getX*2,getY*2));
             settings.doubleBuffering = false;
             auto window = ofCreateWindow(settings);
             window->setVerticalSync(false);
@@ -87,7 +90,7 @@ void ofApp::drawWindow() {
             ofAddListener(windows.back()->events().draw, this, &ofApp::drawRandomInWindow);
         } else {
             shared_ptr<ofAppBaseWindow> recycle = windows[(i*windowLimit)+windowIndex];
-            recycle->setWindowPosition(getX,getY);
+            recycle->setWindowPosition(getX*2,getY*2);
         }
     }
     windowIndex+=1;
@@ -97,6 +100,7 @@ void ofApp::drawRandomInWindow(ofEventArgs & args){
     ofGetCurrentRenderer() -> setBackgroundAuto(false);
    if (ofGetFrameNum() % 4 == 0) {
         ofPushStyle();
+            
             ofBackground(ofColor(ofRandom(0,255),ofRandom(0,255),ofRandom(0,255)));
             ofImage randomAd = ads[ofRandom(0, ads.size())];
             randomAd.draw(-10,25,175, 100);
