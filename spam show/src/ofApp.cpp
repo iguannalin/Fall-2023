@@ -5,14 +5,14 @@ using namespace cv;
 //--------------------------------------------------------------
 void ofApp::setup(){
     ofSetVerticalSync(true);
-    ofSetFrameRate(120);
+    ofSetFrameRate(100);
     finder.setup("haarcascade_frontalface_default.xml");
     finder.setPreset(ObjectFinder::Fast);
     finder.getTracker().setSmoothingRate(.3);
     cam.setup(ofGetWidth(), ofGetHeight());
     ofEnableAlphaBlending();
     
-    windowLimit = 25; // no more than this many windows open at a time per person/blob
+    windowLimit = 15; // no more than this many windows open at a time per person/blob
     
     adLinks = {
 //        "https://iguannalin.github.io/spam/assets/howtocookspam.gif",
@@ -39,8 +39,8 @@ void ofApp::update(){
         finder.update(cam);
     }
 
-    if (abs(centroid[0] - getX) > 100 ||
-        abs(centroid[1] - getY) > 100)
+    if (abs(centroid[0] - getX) > 50 ||
+        abs(centroid[1] - getY) > 50)
     {
         getX = ofLerp(getX, centroid[0], 0.5);
         getY = ofLerp(getY, centroid[1], 0.5);
@@ -94,11 +94,11 @@ void ofApp::drawWindow() {
 
 void ofApp::drawRandomInWindow(ofEventArgs & args){
     ofGetCurrentRenderer() -> setBackgroundAuto(false);
-    if (ofGetFrameNum() % 25 == 0) {
+    if (ofGetFrameNum() % 20 == 0) {
         ofPushStyle();
             ofBackground(ofColor(ofRandom(0,255),ofRandom(0,255),ofRandom(0,255)));
             ofImage randomAd = ads[ofRandom(0, ads.size())];
-            randomAd.draw(-5,15,100, 75);
+            randomAd.draw(-5,15,110, 75);
         ofPopStyle();
    }
 }
