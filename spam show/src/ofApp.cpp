@@ -55,9 +55,16 @@ void ofApp::draw(){
     cam.draw(translateX, translateY);
     ofSetBackgroundColor(0);
     for(int i = 0; i < finder.size(); i++) {
-        blobs = 1;finder.size();
+        blobs = 1; // finder.size();
         ofRectangle object = finder.getObjectSmoothed(i);
         centroid = object.getCenter();
+    }
+    if (finder.size() == 0 && windows.size()>0) {
+        cout << "close??" <<endl;
+        for (int i = 0; i < windows.size(); i++) {
+            shared_ptr<ofAppBaseWindow> recycle = windows[i];
+            recycle->close();
+        }
     }
 }
 
