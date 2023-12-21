@@ -46,19 +46,23 @@ void ofApp::update(){
         getY = ofLerp(getY, centroid[1], 0.5);
         drawWindow();
     }
+    offSetX = (ofGetWidth() - cam.getWidth())/2;
+    offSetY = (ofGetHeight() - cam.getHeight())/2;
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-    translateX = (ofGetWidth()/2 - cam.getWidth()/2);
-    translateY = (ofGetHeight()/2 - cam.getHeight()/2);
-    cam.draw(translateX, translateY);
-    ofSetBackgroundColor(0);
-    for(int i = 0; i < finder.size(); i++) {
-        blobs = 1;//finder.size();
-        ofRectangle object = finder.getObjectSmoothed(i);
-        centroid = object.getCenter();
-    }
+    ofPushMatrix();
+        ofTranslate(ofGetWidth(), 0);
+        ofScale(-1,1);
+        ofSetBackgroundColor(0);
+        cam.draw(offSetX, offSetY);
+        for(int i = 0; i < finder.size(); i++) {
+            blobs = 1;//finder.size();
+            ofRectangle object = finder.getObjectSmoothed(i);
+            centroid = object.getCenter();
+        }
+    ofPopMatrix();
 }
 
 //--------------------------------------------------------------
@@ -71,12 +75,13 @@ void ofApp::drawWindow() {
         windowIndex = 0;
     }
     ofPushMatrix();
-    ofTranslate(translateX, translateY);
+    int windowSize = 100;
+    float xPos = ofGetWidth()-getX-windowSize;
     for (int i = 0; i < blobs; i++) {
         if (windows.size() < (blobs*windowLimit)) {
             ofGLFWWindowSettings settings;
             settings.setSize(100,100);
-            settings.setPosition(ofVec2f(getX,getY));
+            settings.setPosition(ofVec2f(xPos,getY));
             settings.doubleBuffering = false;
             auto window = ofCreateWindow(settings);
             window->setVerticalSync(false);
@@ -85,7 +90,7 @@ void ofApp::drawWindow() {
             ofAddListener(windows.back()->events().draw, this, &ofApp::drawRandomInWindow);
         } else {
             shared_ptr<ofAppBaseWindow> recycle = windows[(i*windowLimit)+windowIndex];
-            recycle->setWindowPosition(getX,getY);
+            recycle->setWindowPosition(xPos,getY);
         }
     }
     ofPopMatrix();

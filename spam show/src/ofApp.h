@@ -28,6 +28,6 @@ class ofApp : public ofBaseApp{
         ofxCv::ObjectFinder finder;
         glm::vec3 centroid;
     
-        float translateX;
-        float translateY;
+        float offSetX;
+        float offSetY;
 };
